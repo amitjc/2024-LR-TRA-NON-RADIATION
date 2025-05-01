@@ -50,6 +50,8 @@ legend {
     margin-top: 1rem;
 }
 
+
+
 .input-group {
     margin-top: 1rem;
 }
@@ -59,7 +61,7 @@ label {
     margin-bottom: 0.3rem;
 }
 
-input[type="radio"], 
+input[type="radio"],
 input[type="checkbox"] {
     margin-right: 0.5rem;
     transform: scale(1.1);
@@ -72,16 +74,12 @@ input[type="number"] {
     border-radius: 4px;
 }
 
-select {
+textarea {
+    width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    min-width: 150px;
-}
-
-/* Ancillary features */
-.ancillary-status {
-    margin-top: 1rem;
+    resize: vertical;
 }
 
 /* Results section */
@@ -95,9 +93,13 @@ select {
     border-radius: 4px;
 }
 
-/* Hidden class */
+/* Utility classes */
 .hidden {
     display: none;
+}
+
+.full-width {
+    grid-column: 1 / -1;
 }
 
 /* Responsive design */
@@ -106,8 +108,9 @@ select {
         display: flex;
         flex-direction: column;
     }
-    
-    input[type="number"] {
+
+    input[type="number"],
+    textarea {
         width: 100%;
     }
 }
