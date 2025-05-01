@@ -1,0 +1,113 @@
+/* Base styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Form elements */
+form {
+    display: grid;
+    gap: 2rem;
+}
+
+fieldset {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+}
+
+legend {
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0 10px;
+    color: #2c3e50;
+}
+
+.radio-group, .checkbox-group {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.input-group {
+    margin-top: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+input[type="radio"], 
+input[type="checkbox"] {
+    margin-right: 0.5rem;
+    transform: scale(1.1);
+}
+
+input[type="number"] {
+    padding: 0.5rem;
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 150px;
+}
+
+/* Ancillary features */
+.ancillary-status {
+    margin-top: 1rem;
+}
+
+/* Results section */
+.result {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #e8f4ff;
+    border-left: 4px solid #3498db;
+    border-radius: 4px;
+}
+
+/* Hidden class */
+.hidden {
+    display: none;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .input-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    input[type="number"] {
+        width: 100%;
+    }
+}

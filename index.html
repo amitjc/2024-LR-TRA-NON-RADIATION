@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LI-RADS Categorization App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>LI-RADS Treatment Response Categorization</h1>
+        <form id="liRadsForm">
+            <fieldset>
+                <legend>Image Quality</legend>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="imageQuality" value="nonEvaluable" required>
+                        Non-evaluable (image degradation/omission)
+                    </label>
+                    <label>
+                        <input type="radio" name="imageQuality" value="adequate">
+                        Adequate
+                    </label>
+                </div>
+            </fieldset>
+
+            <div class="input-group">
+                <label for="liverLocation">Location of observation in liver:</label>
+                <textarea id="liverLocation" name="liverLocation" rows="3" placeholder="e.g., Segment IV, adjacent to portal vein"></textarea>
+            </div>
+
+            <fieldset>
+                <legend>Mass-like Enhancement</legend>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="enhancement" value="nonViable" required>
+                        No mass-like enhancement (Non-viable)
+                    </label>
+                    <label>
+                        <input type="radio" name="enhancement" value="equivocal">
+                        Mass-like enhancement uncertain (Equivocal)
+                    </label>
+                    <label>
+                        <input type="radio" name="enhancement" value="viable">
+                        Mass-like enhancement present (Viable)
+                    </label>
+                </div>
+                
+                <div id="measurements" class="hidden">
+                    <div class="input-group">
+                        <label>Pre-treatment measurement of enhancing portion (mm):
+                            <input type="number" name="preTreatment" min="0" max="100">
+                        </label>
+                    </div>
+                    <div class="input-group">
+                        <label>Post-treatment measurement of mass-like enhancement (mm):
+                            <input type="number" name="postTreatment" min="0" max="100">
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset id="ancillaryFeaturesSection" class="hidden">
+                <legend>Ancillary Features (Favoring Viability)</legend>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" name="diffusionRestriction" value="present">
+                        Diffusion restriction
+                    </label>
+                    <label>
+                        <input type="checkbox" name="t2Hyperintensity" value="present">
+                        T2-hyperintensity
+                    </label>
+                </div>
+            </fieldset>
+
+
+            <button type="submit" class="infer-button">Infer Category</button>
+            <div class="result" id="result">Category: <span id="category">N/A</span></div>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
