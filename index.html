@@ -30,6 +30,31 @@
             </div>
 
             <fieldset>
+                <legend>Latest Therapy Details</legend>
+                <div class="input-group">
+                    <label for="latestTherapyModality">Modality of Latest Therapy:</label>
+                    <select id="latestTherapyModality" name="latestTherapyModality" required>
+                        <option value="" disabled selected>Select Modality</option>
+                        <option value="PEA">Percutaneous ethanol ablation (PEA)</option>
+                        <option value="RFA">Radiofrequency ablation (RFA)</option>
+                        <option value="MWA">Microwave Ablation (MWA)</option>
+                        <option value="TAE">Transarterial embolization (TAE)</option>
+                        <option value="DEB-TACE">Drug-eluting bead Transarterial chemo-embolization (DEB-TACE)</option>
+                        <option value="cTACE">Conventional Tranarterial chemo-embolization (cTACE)</option>
+                        <option value="systemic">Systemic therapy</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="latestLrtDate">Date of Latest LRT:</label>
+                    <input type="date" id="latestLrtDate" name="latestLrtDate">
+                </div>
+                <div class="input-group">
+                    <label>Time Since Latest LRT:</label>
+                    <span id="timeSinceLrt">N/A</span>
+                </div>
+            </fieldset>
+
+            <fieldset>
                 <legend>Mass-like Enhancement</legend>
                 <div class="radio-group">
                     <label>
@@ -75,10 +100,22 @@
             </fieldset>
 
 
-            <button type="submit" class="infer-button">Infer Category</button>
+            <div class="button-group">
+                <button type="submit" class="infer-button">Infer Category</button>
+                <button type="button" id="previewReport" class="preview-button">Preview Report</button>
+                <button type="button" id="exportReport" class="export-button">Export Text</button>
+            </div>
             <div class="result" id="result">Category: <span id="category">N/A</span></div>
+            <div id="reportPreview" class="hidden">
+                <h2>Report Preview</h2>
+                <div id="reportContent"></div>
+            </div>
         </form>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.34.0/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.1/pizzip.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.1/pizzip-utils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
