@@ -24,12 +24,12 @@
                 </div>
             </fieldset>
 
-            <div class="input-group full-width">
+            <div class="input-group full-width hidden" id="locationSection">
                 <label for="liverLocation">Location of observation in liver:</label>
                 <textarea id="liverLocation" name="liverLocation" rows="3" placeholder="e.g., Segment IV, adjacent to portal vein"></textarea>
             </div>
 
-            <fieldset>
+            <fieldset class="hidden" id="latestTherapySection">
                 <legend>Latest Therapy Details</legend>
                 <div class="input-group">
                     <label for="latestTherapyModality">Modality of Latest Therapy:</label>
@@ -54,7 +54,7 @@
                 </div>
             </fieldset>
 
-            <fieldset>
+            <fieldset class="hidden" id="enhancementSection">
                 <legend>Mass-like Enhancement</legend>
                 <div class="radio-group">
                     <label>
@@ -74,18 +74,18 @@
                 <div id="measurements" class="hidden">
                     <div class="input-group">
                         <label>Pre-treatment measurement of enhancing portion (mm):
-                            <input type="number" name="preTreatment" min="0" max="100">
+                            <input type="number" name="preTreatment" min="0">
                         </label>
                     </div>
                     <div class="input-group">
                         <label>Post-treatment measurement of mass-like enhancement (mm):
-                            <input type="number" name="postTreatment" min="0" max="100">
+                            <input type="number" name="postTreatment" min="0">
                         </label>
                     </div>
                 </div>
             </fieldset>
 
-            <fieldset id="ancillaryFeaturesSection">
+            <fieldset id="ancillaryFeaturesSection" class="hidden">
                 <legend>Ancillary Features (Favoring Viability)</legend>
                 <div class="checkbox-group">
                     <label>
@@ -100,13 +100,13 @@
             </fieldset>
 
 
-            <div class="button-group">
+            <div class="button-group hidden" id="buttonSection">
                 <button type="submit" class="infer-button">Infer Category</button>
                 <button type="button" id="previewReport" class="preview-button">Preview Report</button>
                 <button type="button" id="exportReport" class="export-button">Export Text</button>
             </div>
-            <div class="result" id="result">Category: <span id="category">N/A</span></div>
-            <div id="reportPreview" class="hidden">
+            <div class="result hidden" id="resultSection">Category: <span id="category">N/A</span></div>
+            <div id="reportPreview" class="hidden"> {/* Already hidden */}
                 <h2>Report Preview</h2>
                 <div id="reportContent"></div>
             </div>

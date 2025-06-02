@@ -4,14 +4,19 @@ document.getElementById('liRadsForm').addEventListener('submit', function(e) {
     // Get image quality selection
     const imageQuality = document.querySelector('input[name="imageQuality"]:checked');
     if (!imageQuality) return; // Ensure a selection is made
-    
+    const resultSection = document.getElementById('resultSection');
+
     // Handle non-evaluable case first
     if (imageQuality.value === 'nonEvaluable') {
         document.getElementById('category').textContent = 'LR-TR Non-evaluable';
-        document.getElementById('measurements').classList.add('hidden');
-        document.getElementById('ancillaryFeaturesSection').classList.add('hidden');
-        return;
+        resultSection.classList.remove('hidden'); // Show result for non-evaluable
+        // Ensure other sections remain hidden (handled by handleImageQualityChange)
+        handleImageQualityChange(); // Call handler to ensure correct state
+        return; 
     } else {
+        // If adequate, ensure result section is shown (if not already)
+        // but category text will be updated later based on enhancement etc.
+        resultSection.classList.remove('hidden'); 
         const enhancement = document.querySelector('input[name="enhancement"]:checked');
         if (enhancement && enhancement.value === 'equivocal') {
             document.getElementById('ancillaryFeaturesSection').classList.remove('hidden');
@@ -71,27 +76,48 @@ document.getElementById('liRadsForm').addEventListener('submit', function(e) {
 const modalitySelect = document.getElementById('latestTherapyModality');
 const lrtDateInput = document.getElementById('latestLrtDate');
 const timeSinceLrtSpan = document.getElementById('timeSinceLrt');
-const formElementsToDisable = document.querySelectorAll('#liRadsForm fieldset:not(:nth-of-type(2)) input, #liRadsForm fieldset:not(:nth-of-type(2)) select, #liRadsForm fieldset:not(:nth-of-type(2)) textarea, #liRadsForm .button-group button');
+const formElementsToDisable = document.querySelectorAll('#liRadsForm fieldset:not(:nth-of-type(1)):not(:nth-of-type(2)) input, #liRadsForm fieldset:not(:nth-of-type(1)):not(:nth-of-type(2)) select, #liRadsForm fieldset:not(:nth-of-type(1)):not(:nth-of-type(2)) textarea, #liRadsForm .button-group button'); // Adjusted selector for disabling
 const allFormElements = document.querySelectorAll('#liRadsForm input, #liRadsForm select, #liRadsForm textarea, #liRadsForm button'); // All elements for re-enabling
+
+// Get references to the sections controlled by Image Quality
+const locationSection = document.getElementById('locationSection');
+const latestTherapySection = document.getElementById('latestTherapySection');
+const enhancementSection = document.getElementById('enhancementSection');
+const ancillaryFeaturesSection = document.getElementById('ancillaryFeaturesSection'); // Already have this? Check below
+const buttonSection = document.getElementById('buttonSection');
+const resultSection = document.getElementById('resultSection'); // Already have this? Check below
+
 
 // --- Modality Change Listener ---
 modalitySelect.addEventListener('change', function() {
     if (this.value === 'systemic') {
         alert('This app is applicable only for non-radiation based LRT.');
-        formElementsToDisable.forEach(el => el.disabled = true);
+        formElementsToDisable.forEach(el => el.disabled = true); // Disable specific elements
+        modalitySelect.disabled = false; // Keep modality selectable
+        lrtDateInput.disabled = false; // Keep date selectable
         document.getElementById('category').textContent = 'N/A (Systemic Therapy Selected)';
-        document.getElementById('result').classList.remove('hidden'); // Ensure result area is visible
+        resultSection.classList.remove('hidden'); // Ensure result area is visible
         document.getElementById('reportPreview').classList.add('hidden'); // Hide preview
     } else {
-        // Re-enable all elements first, then let other logic handle specific disabling
-        allFormElements.forEach(el => el.disabled = false);
-        // Re-apply initial disabling logic if needed (e.g., measurements, ancillary)
-        handleEnhancementChange(); // Call existing handler to set correct state
-        handleImageQualityChange(); // Call existing handler
-        // Clear the specific message if previously set
-        if (document.getElementById('category').textContent.includes('(Systemic Therapy Selected)')) {
-             document.getElementById('category').textContent = 'N/A';
+        // Re-enable *conditionally* based on image quality state
+        const imageQualityChecked = document.querySelector('input[name="imageQuality"]:checked');
+        if (imageQualityChecked && imageQualityChecked.value === 'adequate') {
+            allFormElements.forEach(el => el.disabled = false);
+             // Re-apply specific disabling logic if needed (e.g., measurements, ancillary)
+            handleEnhancementChange(); // Call existing handler to set correct state
+            // handleImageQualityChange(); // No need to call this here, it triggers this listener
+            // Clear the specific message if previously set
+            if (document.getElementById('category').textContent.includes('(Systemic Therapy Selected)')) {
+                 document.getElementById('category').textContent = 'N/A';
+            }
+        } else {
+             // If image quality is not adequate, keep things disabled except image quality and therapy details
+             allFormElements.forEach(el => el.disabled = true);
+             document.querySelectorAll('input[name="imageQuality"]').forEach(el => el.disabled = false);
+             modalitySelect.disabled = false;
+             lrtDateInput.disabled = false;
         }
+
     }
 });
 
@@ -150,26 +176,51 @@ function handleEnhancementChange() {
     measurementsSection.classList.toggle('hidden', enhancementChecked.value !== 'viable');
 }
 
-// Helper function to re-apply image quality visibility logic
+// Updated function to handle visibility of ALL dependent sections
 function handleImageQualityChange() {
-     const imageQualityChecked = document.querySelector('input[name="imageQuality"]:checked');
-     if (!imageQualityChecked) return;
+    const imageQualityChecked = document.querySelector('input[name="imageQuality"]:checked');
+    if (!imageQualityChecked) return; // Should not happen with 'required' but good practice
 
-     const ancillarySection = document.getElementById('ancillaryFeaturesSection');
-     if (imageQualityChecked.value === 'adequate') {
-         const enhancementChecked = document.querySelector('input[name="enhancement"]:checked');
-         // Only show ancillary if enhancement is equivocal
-         ancillarySection.classList.toggle('hidden', !(enhancementChecked && enhancementChecked.value === 'equivocal'));
-     } else {
-         ancillarySection.classList.add('hidden'); // Hide if not adequate
-         // Also hide measurements if image quality becomes non-evaluable
-         document.getElementById('measurements').classList.add('hidden');
-         // Reset enhancement selection if image quality is non-evaluable? Optional, depends on desired UX.
-     }
+    const isAdequate = imageQualityChecked.value === 'adequate';
+
+    // Toggle visibility of main sections
+    locationSection.classList.toggle('hidden', !isAdequate);
+    latestTherapySection.classList.toggle('hidden', !isAdequate);
+    enhancementSection.classList.toggle('hidden', !isAdequate);
+    buttonSection.classList.toggle('hidden', !isAdequate);
+    resultSection.classList.toggle('hidden', !isAdequate); // Hide result section initially if adequate, show if non-evaluable
+
+    // Specific handling for sub-sections and result text
+    const ancillarySection = document.getElementById('ancillaryFeaturesSection'); // Re-get just in case
+    const measurementsSection = document.getElementById('measurements');
+    const categoryElement = document.getElementById('category');
+    const resultDiv = document.getElementById('resultSection'); // Re-get just in case
+
+    if (isAdequate) {
+        // If adequate, ancillary/measurements visibility depends on enhancement choice
+        handleEnhancementChange(); // Let this function handle ancillary/measurements
+        // Reset category text if it was showing non-evaluable
+        if (categoryElement.textContent === 'LR-TR Non-evaluable') {
+            categoryElement.textContent = 'N/A';
+        }
+         resultDiv.classList.remove('hidden'); // Ensure result div is visible for adequate path too
+    } else {
+        // If non-evaluable, hide ancillary and measurements explicitly
+        ancillarySection.classList.add('hidden');
+        measurementsSection.classList.add('hidden');
+        // Set category text and ensure result section is visible
+        categoryElement.textContent = 'LR-TR Non-evaluable';
+        resultDiv.classList.remove('hidden');
+        // Optionally reset downstream selections?
+        // document.querySelector('input[name="enhancement"]:checked')?.checked = false;
+        // document.getElementById('latestTherapyModality').selectedIndex = 0;
+        // ... etc. - Decided against resetting for now, just hide.
+    }
 }
 
 
-// Add event listener to imageQuality radios to control ancillary features visibility
+// Remove the old imageQuality listener that only handled ancillary features
+/*
 document.querySelectorAll('input[name="imageQuality"]').forEach(radio => {
     radio.addEventListener('change', function() {
         const ancillarySection = document.getElementById('ancillaryFeaturesSection');
@@ -183,8 +234,9 @@ document.querySelectorAll('input[name="imageQuality"]').forEach(radio => {
         }
     });
 });
+*/
 
-// Update event listener for imageQuality to use the helper function
+// Update event listener for imageQuality to use the NEW helper function
 document.querySelectorAll('input[name="imageQuality"]').forEach(radio => {
     radio.addEventListener('change', handleImageQualityChange);
 });
